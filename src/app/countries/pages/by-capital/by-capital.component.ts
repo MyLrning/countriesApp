@@ -6,6 +6,15 @@ import { CountriesService } from '../../services/countries.service';
   selector: 'app-by-capital',
   templateUrl: './by-capital.component.html',
   styles: [
+    `
+      li {
+        cursor: default;
+      }
+      a {
+        text-decoration: none;
+        cursor: default;
+      }
+    `,
   ]
 })
 export class ByCapitalComponent{
@@ -13,6 +22,9 @@ export class ByCapitalComponent{
   term      : string    = 'Kingdom'
   hasError  : boolean   = false;
   countries : Country[] = []
+
+  suggestedCountries : Country[] = []
+  showSuggestions   : boolean   = false;
 
   constructor( private countriesService: CountriesService ) { }
 
@@ -34,4 +46,23 @@ export class ByCapitalComponent{
       })
   }
 
+  suggestions(term: string) {
+    this.term = term;
+    this.showSuggestions = true;
+
+    this.hasError = false;
+
+    this.countriesService.searchByCapital(this.term).subscribe({
+      next: (countries) => {
+        this.suggestedCountries = countries.splice(0, 5);
+      },
+      error: () => {
+        this.suggestedCountries = [];
+      },
+    });
+  }
+
+  searchSuggestion(country: string) {
+    this.search(country);
+  }
 }

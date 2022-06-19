@@ -1,18 +1,35 @@
-<h2>By Country</h2>
-<hr />
+<div class="animate__animated animate__fadeIn animate__faster">
+  <h2>Country</h2>
+  <hr />
 
-<div class="row">
-  <div class="col">
-    <app-country-input
-      (onEnter)="search($event)"
-      (onDebounce)="suggestions($event)"
-      placeholder="Search by country..."
-    >
-    </app-country-input>
+  <div class="row">
+    <div class="col">
+      <app-country-input
+        (onEnter)="search($event)"
+        (onDebounce)="suggestions($event)"
+        placeholder="Search by country..."
+      >
+      </app-country-input>
+    </div>
   </div>
-</div>
 
-<hr />
+  <ul
+    *ngIf="showSuggestions"
+    class="list-group">
+    <li
+      *ngFor="let country of suggestedCountries"
+      class="list-group-item list-group-item-action">
+        <a [routerLink]="[ '/country', country.cca2 ]" (click)="search(country.name.common)">{{ country.name.common }}</a>
+    </li>
+    <li 
+      (click)="searchSuggestion(term)"
+      class="list-group-item list-group-item-action">
+        <a>Search: '{{ term }}'</a>
+    </li>
+  </ul>
+
+  <hr />
+</div>
 
 <div *ngIf="hasError" class="alert alert-danger">
   No results found for <strong> {{ term }} </strong>

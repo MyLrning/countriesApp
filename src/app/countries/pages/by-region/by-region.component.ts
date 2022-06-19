@@ -5,10 +5,16 @@ import { CountriesService } from '../../services/countries.service';
 @Component({
   selector: 'app-by-region',
   templateUrl: './by-region.component.html',
-  styles: [
-  ]
+  styles: [`
+    button {
+      margin-right: 5px;
+    }
+  `]
 })
 export class ByRegionComponent {
+
+  regions: string[] = ['africa', 'americas', 'asia', 'europe', 'oceania'];
+  selectedRegion: string = '';
 
   term      : string    = 'Kingdom'
   hasError  : boolean   = false;
@@ -16,21 +22,29 @@ export class ByRegionComponent {
 
   constructor( private countriesService: CountriesService ) { }
 
-  search( term: string ) {
+  setStyle( region: string ) {
+    return ( region === this.selectedRegion )
+      ? 'btn btn-primary'
+      : 'btn btn-outline-primary';
+  }
 
-    this.hasError = false;
-    this.term     = term;
+  selectRegion( region: string ) {
 
-    this.countriesService.searchByRegion(this.term)
+    if ( region === this.selectedRegion ) { return; }
+
+    this.selectedRegion = region;
+    this.countriesService.searchByRegion( region )
       .subscribe({
-        next: (data) => {
-          this.countries = data          
+        next: (countries) => {
+          this.countries = countries;
+          this.hasError = false;
         },
         error: (err) => {
           this.hasError = true;
           this.countries = [];
+          console.log(err);
           
         }
-      })
+      });
   }
 }

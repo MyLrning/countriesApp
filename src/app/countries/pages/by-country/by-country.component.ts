@@ -6,37 +6,61 @@ import { CountriesService } from '../../services/countries.service';
   selector: 'app-by-country',
   templateUrl: './by-country.component.html',
   styles: [
-  ]
+    `
+      li {
+        cursor: default;
+      }
+      a {
+        text-decoration: none;
+        cursor: default;
+      }
+    `,
+  ],
 })
-export class ByCountryComponent {  
+export class ByCountryComponent {
+  term              : string    = '';
+  hasError          : boolean   = false;
+  countries         : Country[] = [];
 
-  term      : string    = 'Kingdom'
-  hasError  : boolean   = false;
-  countries : Country[] = []
+  suggestedCountries: Country[] = [];
+  showSuggestions   : boolean   = false;
 
-  constructor( private countriesService: CountriesService ) { }
+  constructor(private countriesService: CountriesService) {}
 
-  search( term: string ) {
+  search(term: string) {
+    this.showSuggestions = false;
 
     this.hasError = false;
-    this.term     = term;
+    this.term = term;
 
-    this.countriesService.searchCountry(this.term)
-      .subscribe({
-        next: (data) => {
-          this.countries = data          
-        },
-        error: (err) => {
-          this.hasError = true;
-          this.countries = [];
-          
-        }
-      })
+    this.countriesService.searchCountry(this.term).subscribe({
+      next: (data) => {
+        this.countries = data;
+      },
+      error: (err) => {
+        this.hasError = true;
+        this.countries = [];
+      },
+    });
   }
 
-  suggestions( term: string ) {
+  suggestions(term: string) {
+    this.term = term;
+    this.showSuggestions = true;
+
     this.hasError = false;
-    // TODO: implement suggestions
+
+    this.countriesService.searchCountry(this.term).subscribe({
+      next: (countries) => {
+        this.suggestedCountries = countries.splice(0, 5);
+      },
+      error: () => {
+        this.suggestedCountries = [];
+      },
+    });
   }
 
+  searchSuggestion(country: string) {
+    this.search(country);
+  }
 }

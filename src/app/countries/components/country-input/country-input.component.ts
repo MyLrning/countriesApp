@@ -24,8 +24,7 @@ export class CountryInputComponent implements OnInit {
     this.debouncer
       .pipe(debounceTime(300))
       .subscribe(term => {
-        this.onDebounce.emit(term);
-        
+        this.onDebounce.emit(term);        
       });
   }
 
