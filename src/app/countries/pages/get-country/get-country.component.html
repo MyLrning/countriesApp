@@ -1,1 +1,43 @@
-<p>get-country works!</p>
+<div *ngIf="!country; else divCountry" class="alert alert-info">
+  Please, wait...
+</div>
+
+<ng-template #divCountry>
+  <div class="row">
+    <div class="col-12">
+      <h1>
+        Country: <small>{{country[0].name.common}}</small>
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <h3>Flag</h3>
+      <img
+        [src]="country[0].flags.png"
+        alt="{{country[0].name.common}} flag"
+        class="img-fluid"
+      >
+    </div>
+
+    <div class="col">
+      <h3>Info</h3>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <strong>Capital:</strong> {{country[0].capital}}
+        </li>
+        <li class="list-group-item">
+          <strong>Region:</strong> {{country[0].region}}
+        </li>
+        <li class="list-group-item">
+          <strong>Subregion:</strong> {{country[0].subregion}}
+        </li>
+        <li class="list-group-item">
+          <strong>Population:</strong> {{country[0].population | number}}
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</ng-template>

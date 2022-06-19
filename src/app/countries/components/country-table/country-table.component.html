@@ -1,0 +1,36 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th> # </th>
+      <th> Flag </th>
+      <th> Coat </th>
+      <th> Country </th>
+      <th> Population </th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let country of countries; let i = 'index + 1';">
+      <td> {{i}} </td>
+      <td>
+        <img
+          *ngIf="country.flags.png"
+          src="{{country.flags.png}}"
+          alt="{{country.name}}"
+          class="small-flag"
+        />
+      </td>
+      <td>
+        <img
+          *ngIf="country.coatOfArms.png"
+          src="{{country.coatOfArms.png}}"
+          alt="{{country.name}}"
+          class="small-coat"
+        />
+      <td> {{country.name.common}} </td>
+      <td> {{country.population | number}} </td>
+      <td>
+        <a [routerLink]="['/country', country.cca2]">See more...</a>
+      </td>
+  </tbody>
+</table>
