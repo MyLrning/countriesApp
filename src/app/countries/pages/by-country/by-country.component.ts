@@ -37,7 +37,7 @@ export class ByCountryComponent {
       next: (data) => {
         this.countries = data;
       },
-      error: (err) => {
+      error: () => {
         this.hasError = true;
         this.countries = [];
       },
